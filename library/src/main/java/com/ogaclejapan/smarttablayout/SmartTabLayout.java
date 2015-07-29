@@ -81,6 +81,9 @@ public class SmartTabLayout extends HorizontalScrollView {
   private TabProvider tabProvider;
   private boolean distributeEvenly;
 
+  int offsetLeftForCentering;
+  int offsetRightForCentering;
+
   public SmartTabLayout(Context context) {
     this(context, null);
   }
@@ -171,13 +174,18 @@ public class SmartTabLayout extends HorizontalScrollView {
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
-    if (tabStrip.isIndicatorAlwaysInCenter() && getChildCount() > 0) {
+    if ( (tabStrip.isIndicatorAlwaysInCenter() || tabStrip.isIndicatorInCenter() ) && getChildCount() > 0) {
       View firstTab = tabStrip.getChildAt(0);
       View lastTab = tabStrip.getChildAt(getChildCount() - 1);
       int left = (w - Utils.getMeasuredWidth(firstTab)) / 2 - Utils.getMarginStart(firstTab);
       int right = (w - Utils.getMeasuredWidth(lastTab)) / 2 - Utils.getMarginEnd(lastTab);
       tabStrip.setMinimumWidth(tabStrip.getMeasuredWidth());
-      setPadding(left, getPaddingTop(), right, getPaddingBottom());
+      if( tabStrip.isIndicatorAlwaysInCenter() )
+        setPadding(left, getPaddingTop(), right, getPaddingBottom());
+      else{
+        offsetLeftForCentering = left;
+        offsetRightForCentering = right;
+      }
       setClipToPadding(false);
     }
   }
@@ -402,6 +410,8 @@ public class SmartTabLayout extends HorizontalScrollView {
         int first = Utils.getWidth(firstTab) + Utils.getMarginStart(firstTab);
         int selected = Utils.getWidth(selectedTab) + Utils.getMarginStart(selectedTab);
         targetScrollX -= (first - selected) / 2;
+      } else if(tabStrip.isIndicatorInCenter()){
+        targetScrollX -= offsetLeftForCentering;
       } else if (tabIndex > 0 || positionOffset > 0) {
         // If we're not at the first child and are mid-scroll, make sure we obey the offset
         targetScrollX -= titleOffset;

@@ -50,6 +50,7 @@ class SmartTabStrip extends LinearLayout {
   private static final float DEFAULT_DIVIDER_HEIGHT = 0.5f;
   private static final boolean DEFAULT_INDICATOR_IN_CENTER = false;
   private static final boolean DEFAULT_INDICATOR_IN_FRONT = false;
+  private static final boolean DEFAULT_INDICATOR_ALWAYS_IN_CENTER = false;
   private static final boolean DEFAULT_INDICATOR_WITHOUT_PADDING = false;
   private static final int DEFAULT_INDICATOR_GRAVITY = GRAVITY_BOTTOM;
 
@@ -61,6 +62,7 @@ class SmartTabStrip extends LinearLayout {
   private final RectF indicatorRectF = new RectF();
   private final boolean indicatorWithoutPadding;
   private final boolean indicatorAlwaysInCenter;
+  private final boolean indicatorInCenter;
   private final boolean indicatorInFront;
   private final int indicatorThickness;
   private final int indicatorGravity;
@@ -89,7 +91,8 @@ class SmartTabStrip extends LinearLayout {
 
     boolean indicatorWithoutPadding = DEFAULT_INDICATOR_WITHOUT_PADDING;
     boolean indicatorInFront = DEFAULT_INDICATOR_IN_FRONT;
-    boolean indicatorAlwaysInCenter = DEFAULT_INDICATOR_IN_CENTER;
+    boolean indicatorAlwaysInCenter = DEFAULT_INDICATOR_ALWAYS_IN_CENTER;
+    boolean indicatorInCenter = DEFAULT_INDICATOR_IN_CENTER;
     int indicationInterpolatorId = SmartTabIndicationInterpolator.ID_SMART;
     int indicatorGravity = DEFAULT_INDICATOR_GRAVITY;
     int indicatorColor = DEFAULT_SELECTED_INDICATOR_COLOR;
@@ -106,7 +109,9 @@ class SmartTabStrip extends LinearLayout {
 
     TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.stl_SmartTabLayout);
     indicatorAlwaysInCenter = a.getBoolean(
-        R.styleable.stl_SmartTabLayout_stl_indicatorAlwaysInCenter, indicatorAlwaysInCenter);
+            R.styleable.stl_SmartTabLayout_stl_indicatorAlwaysInCenter, indicatorAlwaysInCenter);
+    indicatorInCenter = a.getBoolean(
+            R.styleable.stl_SmartTabLayout_stl_indicatorInCenter, indicatorInCenter);
     indicatorWithoutPadding = a.getBoolean(
         R.styleable.stl_SmartTabLayout_stl_indicatorWithoutPadding, indicatorWithoutPadding);
     indicatorInFront = a.getBoolean(
@@ -158,6 +163,7 @@ class SmartTabStrip extends LinearLayout {
     this.borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     this.indicatorAlwaysInCenter = indicatorAlwaysInCenter;
+    this.indicatorInCenter = indicatorInCenter;
     this.indicatorWithoutPadding = indicatorWithoutPadding;
     this.indicatorInFront = indicatorInFront;
     this.indicatorThickness = indicatorThickness;
@@ -229,6 +235,10 @@ class SmartTabStrip extends LinearLayout {
 
   boolean isIndicatorAlwaysInCenter() {
     return indicatorAlwaysInCenter;
+  }
+
+  boolean isIndicatorInCenter() {
+    return indicatorInCenter;
   }
 
   SmartTabLayout.TabColorizer getTabColorizer() {
